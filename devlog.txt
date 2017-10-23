@@ -58,8 +58,8 @@ yyyy-mm-dd
 
 2017-10-22
 --------------------------------------------------------------
-Joyce :: Linked submodule, added to component map/DB schema
+Joyce ::  Added to component map/DB schema
 Taylor :: Added to site map, updated devlog
-Bayan :: Added to site map/task division, made flowchart
+Bayan :: Added to site map/task division, made flowchart, linked submodule
 Jennifer :: Added to site map, helped make flowchart
 ==============================================================
