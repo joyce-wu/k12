@@ -31,6 +31,7 @@ wow! oo!...
 MID-DEVELOPMENT DESIGN CHANGES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 we changed ___ to ___ bc...
+2017-10-24 :: We changed the removed link from "View specific story" to "Edit story" because user cannot view whole story before editing it.
 
 LESSONS LEARNED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,18 +49,22 @@ tales of wisdom gained...
     \____/_/ \_____\/ \___/_(   \_____\/ \_____\/ \_____\/
 ==============================================================
 
-
-yyyy-mm-dd
---------------------------------------------------------------
-<Member> :: <Thing member did.>
-<Member> :: <Thing member did.>
-<Member> :: <Thing member did.>
-==============================================================
-
 2017-10-22
 --------------------------------------------------------------
-Joyce ::  Added to component map/DB schema
-Taylor :: Added to site map, updated devlog
-Bayan :: Added to site map/task division, made flowchart, linked submodule
-Jennifer :: Added to site map, helped make flowchart
+joyceW ::  Added to component map/DB schema
+taylorW :: Added to site map, updated devlog
+bayanB :: Added to site map/task division, made flowchart, linked submodule
+jenniferZ :: Added to site map, helped make flowchart
 ==============================================================
+joyceW -- 2017-10-24 13:10:44
+Readme updated and devlogging script added
+
+bayanB -- 2017-10-24 13:18:21
+Coded login, register, onestory, viewAll, and welcome html pages
+
+jenniferZ -- 2017-10-24 13:18:40
+Started accounts database for adding and printing accounts
+
+taylorW -- 2017-10-24 13:19:07
+Started app.py, created root route and started login route
+
