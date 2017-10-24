@@ -30,8 +30,8 @@ wow! oo!...
 
 MID-DEVELOPMENT DESIGN CHANGES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-we changed ___ to ___ bc.../n
-2017-10-24 :: We changed the removed link from "View specific story" to "Edit story" because user cannot view whole story before editing it./n
+we changed ___ to ___ bc...
+2017-10-24 :: We changed the removed link from "View specific story" to "Edit story" because user cannot view whole story before editing it.
 
 LESSONS LEARNED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
