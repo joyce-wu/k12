@@ -63,3 +63,6 @@ Taylor :: Added to site map, updated devlog
 Bayan :: Added to site map/task division, made flowchart, linked submodule
 Jennifer :: Added to site map, helped make flowchart
 ==============================================================
+joyceW -- 2017-10-24 13:10:44
+Readme updated and devlogging script added
+
