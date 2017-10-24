@@ -66,3 +66,12 @@ Jennifer :: Added to site map, helped make flowchart
 joyceW -- 2017-10-24 13:10:44
 Readme updated and devlogging script added
 
+bayanB -- 2017-10-24 13:18:21
+Coded login, register, onestory, viewAll, and welcome html pages
+
+jenniferZ -- 2017-10-24 13:18:40
+Started accounts database for adding and printing accounts
+
+taylorW -- 2017-10-24 13:19:07
+Started app.py, created root route and started login route
+
