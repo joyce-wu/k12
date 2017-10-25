@@ -85,3 +85,6 @@ continued login work/logistics with jinja and db in app.py
 jenniferZ -- 2017-10-25 16:48:42
 Redesigned add_story_user such that the values are in a list instead of in a single string
 
+taylorW -- 2017-10-25 18:51:49
+login, register close to completion
+
