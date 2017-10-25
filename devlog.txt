@@ -70,3 +70,6 @@ Started app.py, created root route and started login route
 
 jenniferZ -- 2017-10-24 22:45:51
 Worked on add_account() and add_story() for accounts database
+bayanB -- 2017-10-24 23:50:54
+compose and edit html forms done
+
