@@ -6,7 +6,7 @@ import csv
 account_db = sqlite3.connect("accounts_database.db");
 account_c = account_db.cursor();
 
-account_c.execute("CREATE TABLE accounts (user TEXT PRIMARY KEY, password TEXT, contributed_stories INTEGER)")
+account_c.execute("CREATE TABLE accounts (user TEXT PRIMARY KEY, password TEXT, contributed_stories TEXT)")
 
 def add_account(user, password):
     #check to see if user doesn't exist
@@ -21,15 +21,14 @@ def add_account(user, password):
 
 def add_story(user, story):
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
-    story_data = account_c.fetchall()
-    print(story_data)
-    if(len(story_data) == 0):
+    prev_stories = account_c.fetchall()[0][0]
+    if(len(prev_stories) == 0):
         new_stories = story
-    #else:
-        #assumes that the
-        #new_stories = story_data + ',' + story
-        account_c.execute("UPDATE accounts SET contributed_stories = '%s'" %(new_stories))
-        print("Success: %s has contributed to %s" %(user, story))
+    else:
+        new_stories = prev_stories + ',' + story
+    account_c.execute("UPDATE accounts SET contributed_stories = '%s' WHERE user = '%s'" %(new_stories, user))
+    
+    print("Success: %s has contributed to %s" %(user, story))
 
 def print_all_accounts():
     accounts = account_c.execute("SELECT * FROM accounts")
@@ -41,9 +40,9 @@ add_account('asdjlkf', '123429')
 add_account('donqwut', '1qw234')
 add_account('donqwut', '1qw234')
 
-add_story('donut', 'doNutFactory')
-add_story('donut', 'doNetFactory')
-add_story('donut', 'doNotFactory')
+add_story('donut', '1')
+add_story('donut', '0')
+add_story('donut', '5')
 print_all_accounts()
 
 account_db.commit()

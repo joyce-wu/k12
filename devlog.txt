@@ -73,3 +73,9 @@ Worked on add_account() and add_story() for accounts database
 bayanB -- 2017-10-24 23:50:54
 compose and edit html forms done
 
+jenniferZ -- 2017-10-25 10:17:39
+Fixed add_story
+
+bayanB -- 2017-10-25 10:17:47
+Fixed add_story
+
