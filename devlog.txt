@@ -79,3 +79,6 @@ Fixed add_story
 bayanB -- 2017-10-25 10:17:47
 Fixed add_story
 
+taylorW -- 2017-10-25 13:25:14
+continued login work/logistics with jinja and db in app.py
+
