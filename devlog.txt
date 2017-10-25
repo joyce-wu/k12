@@ -68,3 +68,5 @@ Started accounts database for adding and printing accounts
 taylorW -- 2017-10-24 13:19:07
 Started app.py, created root route and started login route
 
+jenniferZ -- 2017-10-24 22:45:51
+Worked on add_account() and add_story() for accounts database
