@@ -4,12 +4,20 @@
 </head>
 
 <body>
-<ul>
+<form>
+  <ul>
   {% for title in storydb %}
-  <li> {{title}}</li>
-  {% endfor %}
-</ul>
 
+  <li>  {{title}} <input type="radio" name="story" value={{ID}}> </li>
+  
+  
+
+   
+  {% endfor %}
+
+  </ul>
+  <input type="submit" name="storyID" value="View Story">
+</form>
 <a href="/logout"> LOG OUT </a>
 
 </body>

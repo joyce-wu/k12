@@ -88,3 +88,9 @@ Redesigned add_story_user such that the values are in a list instead of in a sin
 taylorW -- 2017-10-25 18:51:49
 login, register close to completion
 
+bayanB -- 2017-10-26 12:51:48
+logout button and return to Table of contents
+
+bayanB -- 2017-10-26 13:14:44
+Radio buttons for viewall
+
