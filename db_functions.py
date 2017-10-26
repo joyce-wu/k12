@@ -1,7 +1,7 @@
 
 import sqlite3
 import csv
-
+'''
 #accounts database
 account_db = sqlite3.connect("accounts_database.db");
 account_c = account_db.cursor();
@@ -65,18 +65,40 @@ account_db.close()
 
 
 
-
+'''
 #stories
 stories_db = sqlite3.connect("stories_database");
 stories_c = stories_db.cursor();
 
-stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, link TEXT)") #consider list of contributors?
-'''def add_story(title):
-    #randomly generate link? or have a parameter?
-    account_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s')" %(0, 'da donut story', '/doNutDonut'))
-    print("Success: Added " + title + "!")'''
+stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)") #consider list of contributors?
+def add_story(title, text):
+    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', text, text))
+    print("Success: Added " + title + "!")
+
+#convert accounts/stories database to csv?
+def next_id():
+    stories_c.execute("SELECT id FROM stories WHERE ID = (SELECT MAX(ID) FROM stories)")
+    prev_id = stories_c.fetchall()
+    if len(prev_id) == 0:
+        return 0
     
+    return prev_id[0][0] + 1
+
+def print_all_stories():
+    stories = stories_c.execute("SELECT * FROM stories")
+    for story in stories:
+        print(story)
+
+        #print story(int id) --> check permissions --> if edited --> view entire story
+        #                                              else --> view last update w/ edit button
+
     
+add_story('da donut story', 'there was once a donut')
+add_story('da', 'asdf')
+add_story('the cow family', 'the cow said moo')
+add_story('cats... meow', 'cats are cute')
+print_all_stories()
+
 
 stories_db.commit();
 stories_db.close();

@@ -94,3 +94,6 @@ logout button and return to Table of contents
 bayanB -- 2017-10-26 13:14:44
 Radio buttons for viewall
 
+jenniferZ -- 2017-10-26 10:15:16
+started working on adding stories and creating an id for that story
+
