@@ -71,9 +71,9 @@ def viewall():
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
     if chosen_ID not in accounts.(session['uname'])[1]: #CHECK FOR ACCURACY
-        return render_template("edit.html", title = stories.(chosen_ID)[0], last_update = stories.(chosen_ID)[1], chosen_ID = chosen_ID)
-    else:
-        return render_template("viewall.html", title = '<INSERT HTML THAT WILL CREATE A BUTTON THAT WILL LINK TO THE ONESTORY PAGE AND INPUT THE STORY FROM THE DB WITH JINJA>', msg = "You can't edit this story again. Pick another one.")
+        return render_template("edit.html", title = stories.(chosen_ID)[0], last_update = stories.(chosen_ID)[1], chosen_ID = chosen_ID, msg = "Since you have not yet edited this story, you must do so before viewing the entire story.")
+    else: #if they have already edited the story
+        return render_template("onestory.html", title = '<INSERT HTML THAT WILL CREATE A BUTTON THAT WILL LINK TO THE ONESTORY PAGE AND INPUT THE STORY FROM THE DB WITH JINJA>', msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
 
     #FOR COMPOSING
     if chosen_ID == -1:
@@ -91,6 +91,7 @@ def compose():
     add_account_info(user, new_ID)
     #function for adding story to story db
     add_story(new_ID, title, body)
+    return render_template("onestory.html", title = "title created by title function that uses the id to find it in the stories db", body = "body created by body function that uses the id to find it in the stories db", msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 
 @app.route("/edit")
@@ -98,13 +99,20 @@ def edit():
     form_dict = request.args
     chosen_ID = form_dict['chosen_ID']
     update = form_dict['update']
+    user = session['uname']
+    #function to update account db to include newly edited story
+    add_account_info(user, chosen_ID)
+    #function to add story update to story
+    update_story(chosen_ID, update)
+    return render_template("onestory.html", title = "title created by title function that uses the id to find it in the stories db", body = "body created by body function that uses the id to find it in the stories db", msg = "Successfully edited story. Here\'s the story so far. While you can't contibute to it again in the future, you can always check back here to see if anyone else has continued the story!"
+
 
 @app.route("/logout")
 def logout():
     #remove user info from session
     if 'uname' in session:
         session.pop('uname')
-    return render_template('welcome.html', msg = '')
+    return render_template('welcome.html', msg = 'Logout was successful.')
 
 
 
