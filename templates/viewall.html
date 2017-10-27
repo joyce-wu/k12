@@ -5,6 +5,10 @@
 
 <body>
 <form>
+  {% set msgs=get_flashed_messages()%}
+  {% for msg in msgs %}
+  {{msg}}
+  {% endfor%}
   <ul>
   {% for title in storydb %}
 

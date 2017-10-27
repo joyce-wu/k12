@@ -97,3 +97,6 @@ Radio buttons for viewall
 jenniferZ -- 2017-10-26 10:15:16
 started working on adding stories and creating an id for that story
 
+bayanB -- 2017-10-27 10:55:15
+added a flash message to view all and worked with Jennifer
+
