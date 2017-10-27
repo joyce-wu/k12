@@ -72,7 +72,7 @@ stories_c = stories_db.cursor();
 
 stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)") #consider list of contributors?
 def add_story(title, text):
-    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', text, text))
+    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
 
 #convert accounts/stories database to csv?
@@ -84,6 +84,20 @@ def next_id():
     
     return prev_id[0][0] + 1
 
+def update_story(story_id, new_text):
+    stories_c.execute("SELECT * FROM stories WHERE id = " + str(story_id))
+    story = stories_c.fetchall()
+    if len(story) == 0:
+        print("Failed: Story does not exist!")
+    else:
+        '''print("blarge===========")
+        print(story)'''
+        old_whole_story = story[0][2]
+
+        stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = %d" %("\t" + new_text, story_id))
+        stories_c.execute("UPDATE stories SET whole_story = '%s' WHERE id = %d" %(old_whole_story + "\n\t"+ new_text, story_id))
+        
+    
 def print_all_stories():
     stories = stories_c.execute("SELECT * FROM stories")
     for story in stories:
@@ -91,13 +105,26 @@ def print_all_stories():
 
         #print story(int id) --> check permissions --> if edited --> view entire story
         #                                              else --> view last update w/ edit button
-
+def print_last_update_story_content(story_id):
+    stories_c.execute("SELECT last_update FROM stories WHERE id = " + str(story_id))
+    story = stories_c.fetchall()
+    print(story[0][0])
+    
+def print_whole_story_content(story_id):
+    stories_c.execute("SELECT whole_story FROM stories WHERE id = " + str(story_id))
+    story = stories_c.fetchall()
+    print(story[0][0])
+    
     
 add_story('da donut story', 'there was once a donut')
 add_story('da', 'asdf')
 add_story('the cow family', 'the cow said moo')
 add_story('cats... meow', 'cats are cute')
+
+update_story(2, "and then he ate a donut")
 print_all_stories()
+print_whole_story_content(2)
+print_last_update_story_content(2)
 
 
 stories_db.commit();
