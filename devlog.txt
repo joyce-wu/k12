@@ -103,3 +103,6 @@ added a flash message to view all and worked with Jennifer
 jenniferZ -- 2017-10-27 07:57:14
 finished update_story()
 
+taylorW -- 2017-10-27 16:32:20
+logout, viewall, edit, compose
+
