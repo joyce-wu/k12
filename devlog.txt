@@ -112,3 +112,6 @@ modified viewall, compose, edit
 bayanB -- 2017-10-28 11:06:04
 -1 value for compose
 
+jenniferZ -- 2017-10-29 19:24:59
+added print_story based on user permissions and database to dictionary
+

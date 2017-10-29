@@ -1,7 +1,7 @@
 
 import sqlite3
 import csv
-'''
+
 #accounts database
 account_db = sqlite3.connect("accounts_database.db");
 account_c = account_db.cursor();
@@ -35,7 +35,7 @@ def add_story_user(user, story):
         i = 0;
         for ele_story in list_stories:
             if ele_story > story:
-               list_stories.insert(i, story) 
+               list_stories.insert(i, story)
                break
             i+=1
         if i == len(list_stories):
@@ -48,29 +48,13 @@ def print_all_accounts():
     for account in accounts:
         print(account)
 
-add_account('donut', '1234')
-add_account('asdjlkf', '123429')
-add_account('donqwut', '1qw234')
-add_account('donqwut', '1qw234')
-
-add_story_user('dont', '1')
-add_story_user('donut', '0')
-add_story_user('donut', '5')
-add_story_user('donut', '8912')
-add_story_user('donut', '92')
-print_all_accounts()
-
-account_db.commit()
-account_db.close()
 
 
-
-'''
 #stories
 stories_db = sqlite3.connect("stories_database");
 stories_c = stories_db.cursor();
 
-stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)") #consider list of contributors?
+stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)")
 def add_story(title, text):
     stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
@@ -81,7 +65,7 @@ def next_id():
     prev_id = stories_c.fetchall()
     if len(prev_id) == 0:
         return 0
-    
+
     return prev_id[0][0] + 1
 
 def update_story(story_id, new_text):
@@ -90,42 +74,99 @@ def update_story(story_id, new_text):
     if len(story) == 0:
         print("Failed: Story does not exist!")
     else:
-        '''print("blarge===========")
-        print(story)'''
         old_whole_story = story[0][2]
 
         stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = %d" %("\t" + new_text, story_id))
         stories_c.execute("UPDATE stories SET whole_story = '%s' WHERE id = %d" %(old_whole_story + "\n\t"+ new_text, story_id))
-        
-    
+
+
 def print_all_stories():
     stories = stories_c.execute("SELECT * FROM stories")
     for story in stories:
         print(story)
 
-        #print story(int id) --> check permissions --> if edited --> view entire story
-        #                                              else --> view last update w/ edit button
 def print_last_update_story_content(story_id):
     stories_c.execute("SELECT last_update FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     print(story[0][0])
-    
+
 def print_whole_story_content(story_id):
     stories_c.execute("SELECT whole_story FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     print(story[0][0])
-    
-    
+
+def print_story(user, story_id):
+    stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
+    stories_data = account_c.fetchall()
+    if(len(stories_data) == 0):
+        print("The user does not exist!")
+    else:
+        list_stories = eval(stories_data[0][0])
+        try:
+            list_stories.index(str(story_id))
+            print("%s has contributed to the story before" %(user))
+            data = "whole_story"
+
+        except ValueError:
+            print("%s hasn't contributed to the story before" %(user))
+            data = "last_update"
+
+        stories_c.execute("SELECT %s FROM stories WHERE id = '%d'" %(data, story_id))
+        return stories_c.fetchall()[0][0]
+
+def accounts_dict():
+    account_c.execute("SELECT * FROM accounts")
+    accounts = account_c.fetchall()
+    acc_dict = {}
+    for account in accounts:
+        user = account[0]
+        pwd = account[1]
+        stories = eval(account[2])
+        acc_dict[account[0]] = (pwd, stories)
+    return acc_dict
+def stories_dict():
+    stories_c.execute("SELECT * FROM stories")
+    stories = stories_c.fetchall()
+    stry_dict = {}
+    for story in stories:
+        stry_dict[story[0]] = story[1:]
+    return stry_dict
+
+#testing
+add_account('donut', '1234')
+add_account('asdjlkf', '123429')
+add_account('donqwut', '1qw234')
+add_account('donqwut', '1qw234')
+
+add_story_user('dont', '1')
+add_story_user('donut', '0')
+add_story_user('donut', '5')
+add_story_user('donut', '8912')
+add_story_user('donut', '92')
+#print_all_accounts()
+
 add_story('da donut story', 'there was once a donut')
 add_story('da', 'asdf')
 add_story('the cow family', 'the cow said moo')
 add_story('cats... meow', 'cats are cute')
 
 update_story(2, "and then he ate a donut")
-print_all_stories()
-print_whole_story_content(2)
-print_last_update_story_content(2)
+#print_all_stories()
+#print_whole_story_content(2)
+#print_last_update_story_content(2)
+print(print_story('donut', 2))
 
+add_story_user('donut','2')
+print(print_story('donut', 2))
+
+
+print(accounts_dict())
+print(stories_dict())
+
+
+
+account_db.commit();
+account_db.close();
 
 stories_db.commit();
 stories_db.close();
