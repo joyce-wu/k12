@@ -3,11 +3,14 @@ import sqlite3
 import csv
 
 #accounts database
-account_db = sqlite3.connect("accounts_database.db");
+account_db = sqlite3.connect("accounts_database");
 account_c = account_db.cursor();
 
-
-account_c.execute("CREATE TABLE accounts (user TEXT PRIMARY KEY, password TEXT, contributed_stories TEXT)")
+#checks to see if accounts database was already created
+try:
+    account_c.execute("CREATE TABLE accounts (user TEXT PRIMARY KEY, password TEXT, contributed_stories TEXT)")
+except:
+    print()
 
 #add_account() adds an account given its username and password
 def add_account(user, password):
@@ -23,13 +26,13 @@ def add_account(user, password):
 
 #add_story() adds the given story to the user's list of contributed stories
 def add_story_user(user, story):
-    #checks to see if
-    #eval(): string into list
+    #checks to see if the user exists
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
     stories_data = account_c.fetchall()
     if(len(stories_data) == 0):
         print("The user does not exist!")
     else:
+        #eval() turns the string into list
         list_stories = eval(stories_data[0][0])
         #insert stories in order
         i = 0;
@@ -40,9 +43,11 @@ def add_story_user(user, story):
             i+=1
         if i == len(list_stories):
             list_stories.append(story)
+        #updates the database
         account_c.execute("UPDATE accounts SET contributed_stories = \"%s\" WHERE user = '%s'" %(repr(list_stories), user))
         print("Success: %s has contributed to %s" %(user, story))
 
+#print_all_accounts() prints out all the accounts in the database
 def print_all_accounts():
     accounts = account_c.execute("SELECT * FROM accounts")
     for account in accounts:
@@ -50,16 +55,20 @@ def print_all_accounts():
 
 
 
-#stories
+#stories database
 stories_db = sqlite3.connect("stories_database");
 stories_c = stories_db.cursor();
-
-stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)")
+#checks to see if stories database was already created
+try:
+    stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)")
+except:
+    print()
+#add_story() adds the story
 def add_story(title, text):
     stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
 
-#convert accounts/stories database to csv?
+#next_id() finds the next available id
 def next_id():
     stories_c.execute("SELECT id FROM stories WHERE ID = (SELECT MAX(ID) FROM stories)")
     prev_id = stories_c.fetchall()
@@ -68,6 +77,7 @@ def next_id():
 
     return prev_id[0][0] + 1
 
+#update_story() adds new text into the story
 def update_story(story_id, new_text):
     stories_c.execute("SELECT * FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
@@ -79,22 +89,25 @@ def update_story(story_id, new_text):
         stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = %d" %("\t" + new_text, story_id))
         stories_c.execute("UPDATE stories SET whole_story = '%s' WHERE id = %d" %(old_whole_story + "\n\t"+ new_text, story_id))
 
-
+#print_all_stories() prints all stories
 def print_all_stories():
     stories = stories_c.execute("SELECT * FROM stories")
     for story in stories:
         print(story)
 
+#print_last_update_story_content() prints the last_update of the given story
 def print_last_update_story_content(story_id):
     stories_c.execute("SELECT last_update FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     print(story[0][0])
 
+#print_whole_story_content() prints the whole_story of the given story
 def print_whole_story_content(story_id):
     stories_c.execute("SELECT whole_story FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     print(story[0][0])
 
+#print_story() returns the story based on its permissions
 def print_story(user, story_id):
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
     stories_data = account_c.fetchall()
@@ -114,6 +127,7 @@ def print_story(user, story_id):
         stories_c.execute("SELECT %s FROM stories WHERE id = '%d'" %(data, story_id))
         return stories_c.fetchall()[0][0]
 
+#accounts_dict() returns a dictionary with info from the accounts database
 def accounts_dict():
     account_c.execute("SELECT * FROM accounts")
     accounts = account_c.fetchall()
@@ -124,6 +138,8 @@ def accounts_dict():
         stories = eval(account[2])
         acc_dict[account[0]] = (pwd, stories)
     return acc_dict
+
+#stories_dict() returns a dictionary with info from the stories database
 def stories_dict():
     stories_c.execute("SELECT * FROM stories")
     stories = stories_c.fetchall()
@@ -132,39 +148,8 @@ def stories_dict():
         stry_dict[story[0]] = story[1:]
     return stry_dict
 
-#testing
-add_account('donut', '1234')
-add_account('asdjlkf', '123429')
-add_account('donqwut', '1qw234')
-add_account('donqwut', '1qw234')
 
-add_story_user('dont', '1')
-add_story_user('donut', '0')
-add_story_user('donut', '5')
-add_story_user('donut', '8912')
-add_story_user('donut', '92')
-#print_all_accounts()
-
-add_story('da donut story', 'there was once a donut')
-add_story('da', 'asdf')
-add_story('the cow family', 'the cow said moo')
-add_story('cats... meow', 'cats are cute')
-
-update_story(2, "and then he ate a donut")
-#print_all_stories()
-#print_whole_story_content(2)
-#print_last_update_story_content(2)
-print(print_story('donut', 2))
-
-add_story_user('donut','2')
-print(print_story('donut', 2))
-
-
-print(accounts_dict())
-print(stories_dict())
-
-
-
+#commiting changes and closing the databases
 account_db.commit();
 account_db.close();
 
