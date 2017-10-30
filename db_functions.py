@@ -161,6 +161,46 @@ def stories_dict():
     return stry_dict
 
 
+#testing
+
+print('*******ADDING ACCOUNTS*******')
+add_account('donut', '1234')
+add_account('asdjlkf', '123429')
+add_account('donqwut', '1qw234')
+add_account('donqwut', '1qw234')
+
+print_all_accounts()
+
+#print "******USERS CONTRIBUTING******"
+add_story_user('dont', '1')
+add_story_user('donut', '0')
+add_story_user('donut', '5')
+add_story_user('donut', '8912')
+add_story_user('donut', '92')
+
+add_story('da donut story', 'there was once a donut')
+add_story('da', 'asdf')
+add_story('the cow family', 'the cow said moo')
+add_story('cats... meow', 'cats are cute')
+
+update_story(2, "and then he ate a donut")
+#print_all_stories()
+#print_whole_story_content(2)
+#print_last_update_story_content(2)
+print('\n\n****PRINT STORY****')
+print(print_story('donut', 2))
+
+add_story_user('donut','2')
+print(print_story('donut', 2))
+
+print('\n\n****PRINT ACCOUNT DICT****')
+print(accounts_dict())
+
+print('\n\n****PRINT STORY DICT****')
+print(stories_dict())
+
+
+
 #commiting changes and closing the databases
 account_db.commit();
 account_db.close();

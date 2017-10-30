@@ -5,7 +5,7 @@
 
 <body>
   <form>
-    
+
   {% set msgs=get_flashed_messages()%}
   {% for msg in msgs %}
   {{msg}}
@@ -13,13 +13,13 @@
 
   <ul>
     <li> Compose<input type="radio" name="story" value="-1"></li>
-    {% for title in storydb %}
+    {% for title in title_list %}
 
   <li>  {{title}} <input type="radio" name="story" value={{ID}}> </li>
-  
-  
 
-   
+
+
+
   {% endfor %}
 
   </ul>

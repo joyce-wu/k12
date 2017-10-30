@@ -9,19 +9,29 @@ app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
 #------REPLACE WITH DICT OF ACCOUNT FROM DB--------
+#str:[str, [str]]
 #user:[password, [story_ids]]
-accounts = {'topher':['stuycs', [0, 1]]}
+#accounts = {'topher':['stuycs', [0, 1]]}
+accounts = db_functions.accounts_dict()
 
+#int:[str, str, str]
 #story_id:[title, content, update]
-stories = {0:['how to cs at stuy', 'YOU GOTTA USE YOUR KTS', 'KTS'], 1:['rubber ducky', 'you\'r so fine']}
+#stories = {0:['how to cs at stuy', 'YOU GOTTA USE YOUR KTS', 'KTS'], 1:['rubber ducky', 'you\'r so fine']}
+stories = db_functions.stories_dict()
 #--------------------------------------------------
 
 #landing page
 @app.route("/")
 def root():
+
+    #create list of story titles
+    title_list = []
+    for id in stories:
+        title_list.append(id[1])
+
     #is the user is already logged in, then take them directly to the home/view all stories page
     if 'uname' in session.keys():
-        return render_template('viewall.html')
+        return render_template('viewall.html', title_list = title_list, msg = 'Welcome back.')
     else: #if they're not logged in, bring them to the general welcome page and ask them to login/signup
         return render_template('welcome.html') #OR WHATEVER THE WELCOME PAGE HTML IS
 
@@ -37,7 +47,13 @@ def login():
         if accounts[uname] == password:
             #add username to the current session
             session['uname'] = uname
-            return render_template("viewall.html", title = '<INSERT HTML THAT WILL CREATE A BUTTON THAT WILL LINK TO THE ONESTORY PAGE AND INPUT THE STORY FROM THE DB WITH JINJA>') #must send username var for jinja
+
+            #create list of story titles
+            title_list = []
+            for id in stories:
+                title_list.append(id[1])
+
+            return render_template("viewall.html", title_list = title_list) #must send username var for jinja
         else:
             return render_template("login.html", msg = "Incorrect password.")
     else:
@@ -57,8 +73,13 @@ def register():
         if pass1 == pass2: #if the passwords match, create account
             db_functions.add_account(username, password1)
             session['uname'] = uname #add the username to the session
-            title =
-            return render_template("viewall.html", title = '<INSERT HTML THAT WILL CREATE A BUTTON THAT WILL LINK TO THE ONESTORY PAGE AND INPUT THE STORY FROM THE DB WITH JINJA>', msg = '')
+
+            #create list of story titles
+            title_list = []
+            for id in stories:
+                title_list.append(id[1])
+
+            return render_template("viewall.html", title_list = title_list, msg = 'Welcome.')
         else:
             return render_template("register.html", msg = "Passwords do not match.")
 
@@ -71,9 +92,9 @@ def viewall():
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
     if chosen_ID not in accounts.(session['uname'])[1]: #CHECK FOR ACCURACY
-        return render_template("edit.html", title = stories.(chosen_ID)[0], last_update = stories.(chosen_ID)[1], chosen_ID = chosen_ID, msg = "Since you have not yet edited this story, you must do so before viewing the entire story.")
+        return render_template("edit.html", title = stories.(chosen_ID)[0], last_update = stories.(chosen_ID)[2], chosen_ID = chosen_ID, msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
-        return render_template("onestory.html", title = '<INSERT HTML THAT WILL CREATE A BUTTON THAT WILL LINK TO THE ONESTORY PAGE AND INPUT THE STORY FROM THE DB WITH JINJA>', msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
+        return render_template("onestory.html", title = stories.(chosen_ID)[0], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
 
     #FOR COMPOSING
     if chosen_ID == -1:
