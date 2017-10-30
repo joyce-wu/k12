@@ -73,10 +73,10 @@ except:
 #add_story() adds the story
 #returns the id of the new story
 def add_story(title, text):
-    next_id = next_id()
-    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id, 'da donut story', "\t" + text, "\t" + text))
+    new_id = next_id()
+    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(new_id, 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
-    return next_id
+    return new_id
 
 #next_id() finds the next available id
 #helper function for add_story()
@@ -205,9 +205,10 @@ print(stories_dict())
 
 
 
-#commiting changes and closing the databases
-account_db.commit();
-account_db.close();
+#finish() commits changes and closes the databases
+def finish():
+    account_db.commit();
+    account_db.close();
 
-stories_db.commit();
-stories_db.close();
+    stories_db.commit();
+    stories_db.close();
