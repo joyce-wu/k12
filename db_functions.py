@@ -13,6 +13,7 @@ except:
     print()
 
 #add_account() adds an account given its username and password
+#password should be a string
 def add_account(user, password):
     #looks through the table to see if the user already exists
     accounts = account_c.execute("SELECT user FROM accounts WHERE user = '%s'" %(user))
@@ -25,6 +26,7 @@ def add_account(user, password):
         print("Failed: Username already exists!")
 
 #add_story() adds the given story to the user's list of contributed stories
+#story should be a string
 def add_story_user(user, story):
     #checks to see if the user exists
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
@@ -63,12 +65,14 @@ try:
     stories_c.execute("CREATE TABLE stories (id INTEGER PRIMARY KEY, title TEXT, whole_story TEXT, last_update TEXT)")
 except:
     print()
+
 #add_story() adds the story
 def add_story(title, text):
     stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
 
 #next_id() finds the next available id
+#helper function for add_story()
 def next_id():
     stories_c.execute("SELECT id FROM stories WHERE ID = (SELECT MAX(ID) FROM stories)")
     prev_id = stories_c.fetchall()
@@ -78,12 +82,15 @@ def next_id():
     return prev_id[0][0] + 1
 
 #update_story() adds new text into the story
+#story_id should be an integer
 def update_story(story_id, new_text):
+    #checks to see if story exists
     stories_c.execute("SELECT * FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     if len(story) == 0:
         print("Failed: Story does not exist!")
     else:
+        #updates last_update and whole_story
         old_whole_story = story[0][2]
 
         stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = %d" %("\t" + new_text, story_id))
@@ -108,22 +115,23 @@ def print_whole_story_content(story_id):
     print(story[0][0])
 
 #print_story() returns the story based on its permissions
+#story_id should be an integer
 def print_story(user, story_id):
+    #checks to see if user exists
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
     stories_data = account_c.fetchall()
     if(len(stories_data) == 0):
         print("The user does not exist!")
     else:
+        #if the story's id is not found in the user's contributed_stories, then it hasn't contributed to the story before
         list_stories = eval(stories_data[0][0])
         try:
             list_stories.index(str(story_id))
             print("%s has contributed to the story before" %(user))
             data = "whole_story"
-
         except ValueError:
             print("%s hasn't contributed to the story before" %(user))
             data = "last_update"
-
         stories_c.execute("SELECT %s FROM stories WHERE id = '%d'" %(data, story_id))
         return stories_c.fetchall()[0][0]
 

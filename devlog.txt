@@ -115,3 +115,6 @@ added print_story based on user permissions and database to dictionary
 joyceW -- 2017-10-29 22:10:36
 added changes file
 
+jenniferZ -- 2017-10-29 22:39:18
+added print_story() that returns based on user permissions, and database_to_dictionary function
+
