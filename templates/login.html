@@ -4,18 +4,17 @@
   </head>
 
   <body>
-    <form action="greet" method="POST">
-      {% set msgs = get_flashed_messages() %}
-      {% for msg in msgs %}
+    <form action="/check_login" method="GET">
+      
       {{msg}}
 </font>
-{% endfor %}
+
 <br>
-Username: <input type="text" name="username">
+Username: <input type="text" name="username" required>
 <br>
-Password: <input type="password" name="password">
+Password: <input type="password" name="password" required>
 <br>
-<input type="submit" name="login" value="Sign In">
+<input type="submit">
 </form>
 </body>
 </html>

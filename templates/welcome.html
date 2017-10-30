@@ -4,10 +4,51 @@
 </head>
 
 <body>
+
+  <h1> Welcome!! </h1>
+  <br>
 <strong>Have an account?</strong>
 
 <a href="/login">Log in</a>
+<!--br>
+<b>Log In:</b>
+<form action="/check_login" method="GET">
+  {% set msgs = get_flashed_messages() %}
+  {% for msg in msgs %}
+  {{msg}}
+</font>
+{% endfor %}
+<br>
+Username: <input type="text" name="username" required>
+<br>
+Password: <input type="password" name="password" required>
+<br>
+<input type="submit" name="login" value="Sign In">
+</form>
+
+
+<br-->
+
+
 <strong> Need one?</strong>
-<a href="/register"> Make an account</a> 
+<a href="/register"> Make an account</a>
+<!--br>
+<b>Make an Account:</b>
+<form action="/register" method="GET">
+            {% set msgs = get_flashed_messages() %}
+            {% for msg in msgs %}
+                {{msg}}
+            </font>
+            {% endfor %}
+            <br>
+            Username: <input type="text" name="username" required>
+            <br>
+            Password: <input type="password" name="password1" required>
+            <br>
+            Confirm Password: <input type="password" name="password2" required>
+            <br>
+            <input type="submit" name="Signup" value="Sign Up">
+</form>
+
 </body>
-</html>
+</html-->

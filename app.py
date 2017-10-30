@@ -23,22 +23,33 @@ stories = db_functions.stories_dict()
 #landing page
 @app.route("/")
 def root():
-
     #create list of story titles
     title_list = []
     for id in stories:
-        title_list.append(id[1])
+        title_list.append(str(stories[id][1]))
 
     #is the user is already logged in, then take them directly to the home/view all stories page
     if 'uname' in session.keys():
         return render_template('viewall.html', title_list = title_list, msg = 'Welcome back.')
     else: #if they're not logged in, bring them to the general welcome page and ask them to login/signup
-        return render_template('welcome.html') #OR WHATEVER THE WELCOME PAGE HTML IS
+        return render_template('welcome.html', uname = '', password = '', password1 = '', password2 = '') #OR WHATEVER THE WELCOME PAGE HTML IS
 
 @app.route("/login")
 def login():
+    if 'username' in session:
+        title_list = []
+        for id in stories:
+            title_list.append(str(stories[id][1]))
+
+            return render_template("viewall.html", title_list = title_list)
+    else:
+        return render_template("login.html")
+
+
+@app.route("/check_login")
+def check_login():
     form_dict = request.args
-    uname = form_dict['uname'] #get user from url string
+    uname = form_dict['username'] #get user from url string
     password = form_dict['password'] #get pass from url string
 
     #check for existing user
@@ -51,17 +62,28 @@ def login():
             #create list of story titles
             title_list = []
             for id in stories:
-                title_list.append(id[1])
+                title_list.append(str(stories[id][1]))
 
-            return render_template("viewall.html", title_list = title_list) #must send username var for jinja
+                return render_template("viewall.html", title_list = title_list) #must send username var for jinja
         else:
-            return render_template("login.html", msg = "Incorrect password.")
+            return render_template("login.html", msg = "Incorrect username/password.")
     else:
-        return render_template('login.html', msg = "Incorrect username.")
+        return render_template('login.html', msg = "Incorrect username/password.")
 
 
 @app.route("/register")
 def register():
+    if 'username' not in session:
+        return render_template('register.html')
+    else:
+        title_list = []
+        for id in stories:
+            title_list.append(str(stories[id][1]))
+
+            return render_template("viewall.html", title_list = title_list)
+
+@app.route('/check_register')
+def check_register():
     form_dict = request.args
     uname = form_dict['username']
     pass1 = form_dict['password1']
@@ -71,17 +93,18 @@ def register():
         return render_template("register.html", msg = "That username is taken.")
     else:
         if pass1 == pass2: #if the passwords match, create account
-            db_functions.add_account(username, password1)
+            db_functions.add_account(uname, pass1)
             session['uname'] = uname #add the username to the session
 
             #create list of story titles
             title_list = []
             for id in stories:
-                title_list.append(id[1])
+                title_list.append(str(stories[id][1]))
 
             return render_template("viewall.html", title_list = title_list, msg = 'Welcome.')
         else:
             return render_template("register.html", msg = "Passwords do not match.")
+
 
 
 @app.route("/viewall")
@@ -141,8 +164,7 @@ def logout():
     return render_template('welcome.html', msg = 'Logout was successful.')
 
 
-
-
+db_functions.finish()
 
 #-------------------------------
 if __name__ == "__main__":
