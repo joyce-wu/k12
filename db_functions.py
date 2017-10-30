@@ -71,9 +71,12 @@ except:
     print()
 
 #add_story() adds the story
+#returns the id of the new story
 def add_story(title, text):
-    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id(), 'da donut story', "\t" + text, "\t" + text))
+    next_id = next_id()
+    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(next_id, 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
+    return next_id
 
 #next_id() finds the next available id
 #helper function for add_story()
