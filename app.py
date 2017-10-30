@@ -29,7 +29,7 @@ def root():
         title_id_list.append([str(id), str(stories[id][1])])
 
     #is the user is already logged in, then take them directly to the home/view all stories page
-    if 'uname' in session.keys():
+    if 'username' in session.keys():
         return render_template('viewall.html', title_id_list = title_id_list, msg = 'Welcome back.')
     else: #if they're not logged in, bring them to the general welcome page and ask them to login/signup
         return render_template('welcome.html', uname = '', password = '', password1 = '', password2 = '') #OR WHATEVER THE WELCOME PAGE HTML IS
@@ -56,9 +56,9 @@ def check_login():
     #check for existing user
     if uname in accounts.keys():
         #check matching password
-        if accounts[uname] == password:
+        if accounts[uname][0] == password:
             #add username to the current session
-            uname = session['uname']
+            session['username'] = uname
 
             #create list of story ids, titles
             title_id_list = []
@@ -67,9 +67,9 @@ def check_login():
 
                 return render_template("viewall.html", title_id_list = title_id_list) #must send username var for jinja
         else:
-            return render_template("login.html", msg = "Incorrect username/password.")
+            return render_template("login.html", msg = "Incorrect password.")
     else:
-        return render_template('login.html', msg = "Incorrect username/password.")
+        return render_template('login.html', msg = "Incorrect username.")
 
 
 @app.route("/register")
@@ -95,12 +95,16 @@ def check_register():
         return render_template("register.html", msg = "That username is taken.")
     else:
         if pass1 == pass2: #if the passwords match, create account
+            print uname + " " + pass1
             db_functions.add_account(uname, pass1)
-            uname = session['uname'] #add the username to the session
+            db_functions.print_all_accounts()
+            session['username'] = uname #add the username to the session
 
             #create list of story ids, titles
             title_id_list = []
             for id in stories:
+                print ("********STORIES*********")
+                print str(stories[id][1])
                 title_id_list.append([str(id), str(stories[id][1])])
 
 
@@ -117,8 +121,8 @@ def viewall():
 
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
-    if chosen_ID not in accounts[ session['uname'] ][1]: #CHECK FOR ACCURACY
-        print(session['uname'])
+    if chosen_ID not in accounts[ session['username'] ][1]: #CHECK FOR ACCURACY
+        print(session['username'])
         return render_template("edit.html", title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
@@ -132,7 +136,7 @@ def compose():
     form_dict = request.args
     title =  form_dict['title']
     story = form_dict['story']
-    user = session['uname']
+    user = session['username']
 
     #create a new ID number for this story
     if bool(stories) == False: #if the stories dict is empty
@@ -151,7 +155,7 @@ def edit():
     form_dict = request.args
     chosen_ID = form_dict['chosen_ID']
     update = form_dict['update']
-    user = session['uname']
+    user = session['username']
 
     #function to update account db to include newly edited story
     add_account_user(user, chosen_ID)
@@ -163,8 +167,8 @@ def edit():
 @app.route("/logout")
 def logout():
     #remove user info from session
-    if 'uname' in session:
-        session.pop('uname')
+    if 'username' in session:
+        session.pop('username')
     return render_template('welcome.html', msg = 'Logout was successful.')
 
 
