@@ -4,7 +4,7 @@
 </head>
 
 <body>
-  <form>
+  <form action="/edit" method="GET">
      {% set msgs=get_flashed_messages()%}
      {% for msg in msgs %}
      {{msg}}

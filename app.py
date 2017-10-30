@@ -23,25 +23,26 @@ stories = db_functions.stories_dict()
 #landing page
 @app.route("/")
 def root():
-    #create list of story titles
-    title_list = []
+    #create list of story ids, titles
+    title_id_list = []
     for id in stories:
-        title_list.append(str(stories[id][1]))
+        title_id_list.append([str(id), str(stories[id][1])])
 
     #is the user is already logged in, then take them directly to the home/view all stories page
     if 'uname' in session.keys():
-        return render_template('viewall.html', title_list = title_list, msg = 'Welcome back.')
+        return render_template('viewall.html', title_id_list = title_id_list, msg = 'Welcome back.')
     else: #if they're not logged in, bring them to the general welcome page and ask them to login/signup
         return render_template('welcome.html', uname = '', password = '', password1 = '', password2 = '') #OR WHATEVER THE WELCOME PAGE HTML IS
 
 @app.route("/login")
 def login():
     if 'username' in session:
-        title_list = []
+        #create list of story ids, titles
+        title_id_list = []
         for id in stories:
-            title_list.append(str(stories[id][1]))
+            title_id_list.append([str(id), str(stories[id][1])])
 
-            return render_template("viewall.html", title_list = title_list)
+            return render_template("viewall.html", title_id_list = title_id_list)
     else:
         return render_template("login.html")
 
@@ -57,14 +58,14 @@ def check_login():
         #check matching password
         if accounts[uname] == password:
             #add username to the current session
-            session['uname'] = uname
+            uname = session['uname']
 
-            #create list of story titles
-            title_list = []
+            #create list of story ids, titles
+            title_id_list = []
             for id in stories:
-                title_list.append(str(stories[id][1]))
+                title_id_list.append([str(id), str(stories[id][1])])
 
-                return render_template("viewall.html", title_list = title_list) #must send username var for jinja
+                return render_template("viewall.html", title_id_list = title_id_list) #must send username var for jinja
         else:
             return render_template("login.html", msg = "Incorrect username/password.")
     else:
@@ -76,11 +77,12 @@ def register():
     if 'username' not in session:
         return render_template('register.html')
     else:
-        title_list = []
+        #create list of story ids, titles
+        title_id_list = []
         for id in stories:
-            title_list.append(str(stories[id][1]))
+            title_id_list.append([str(id), str(stories[id][1])])
 
-            return render_template("viewall.html", title_list = title_list)
+            return render_template("viewall.html", title_id_list = title_id_list)
 
 @app.route('/check_register')
 def check_register():
@@ -94,14 +96,15 @@ def check_register():
     else:
         if pass1 == pass2: #if the passwords match, create account
             db_functions.add_account(uname, pass1)
-            session['uname'] = uname #add the username to the session
+            uname = session['uname'] #add the username to the session
 
-            #create list of story titles
-            title_list = []
+            #create list of story ids, titles
+            title_id_list = []
             for id in stories:
-                title_list.append(str(stories[id][1]))
+                title_id_list.append([str(id), str(stories[id][1])])
 
-            return render_template("viewall.html", title_list = title_list, msg = 'Welcome.')
+
+            return render_template("viewall.html", title_id_list = title_id_list, msg = 'Welcome.')
         else:
             return render_template("register.html", msg = "Passwords do not match.")
 
@@ -115,6 +118,7 @@ def viewall():
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
     if chosen_ID not in accounts[ session['uname'] ][1]: #CHECK FOR ACCURACY
+        print(session['uname'])
         return render_template("edit.html", title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")

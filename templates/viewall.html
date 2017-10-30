@@ -4,26 +4,20 @@
 </head>
 
 <body>
-  <form>
-
-  {% set msgs=get_flashed_messages()%}
-  {% for msg in msgs %}
+  <form action="/viewall" method="GET">
   {{msg}}
-  {% endfor%}
+
 
   <ul>
-    <li> Compose<input type="radio" name="story" value="-1"></li>
-    {% for title in title_list %}
+    <li> Compose<input type="radio" name="chosen_ID" value="-1"></li>
+    {% for item in title_id_list %}
 
-  <li>  {{title}} <input type="radio" name="story" value={{ID}}> </li>
-
-
-
+  <li>  {{item[1]}} <input type="radio" name="chosen_ID" value={{item[0]}}> </li>
 
   {% endfor %}
 
   </ul>
-  <input type="submit" name="storyID" value="View Story">
+  <input type="submit" name="choice" value="Go to This Story">
 </form>
 <a href="/logout"> LOG OUT </a>
 

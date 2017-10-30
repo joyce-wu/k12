@@ -1,9 +1,12 @@
 
 import sqlite3
 import csv
+import threading
+
+lock = threading.RLock()
 
 #accounts database
-account_db = sqlite3.connect("accounts_database");
+account_db = sqlite3.connect("accounts_database", check_same_thread=False); #
 account_c = account_db.cursor();
 
 #checks to see if accounts database was already created
@@ -16,7 +19,8 @@ except:
 #password should be a string
 def add_account(user, password):
     #looks through the table to see if the user already exists
-    accounts = account_c.execute("SELECT user FROM accounts WHERE user = '%s'" %(user))
+    with lock:
+        accounts = account_c.execute("SELECT user FROM accounts WHERE user = '%s'" %(user))
     data = account_c.fetchall()
     if(len(data) == 0):
         #contributed_stories is empty at first
@@ -58,7 +62,8 @@ def print_all_accounts():
     accounts = account_c.execute("SELECT * FROM accounts")
     for account in accounts:
         print(account)
-
+print("*******PRINT ALL ACCTS********")
+print_all_accounts
 
 
 #stories database
