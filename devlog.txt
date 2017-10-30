@@ -121,3 +121,6 @@ added print_story() that returns based on user permissions, and database_to_dict
 taylorW -- 2017-10-29 23:10:27
 modified functions for db functions
 
+taylorW -- 2017-10-29 23:46:37
+continued modifying for db functions
+

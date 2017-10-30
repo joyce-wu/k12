@@ -171,13 +171,14 @@ add_account('donqwut', '1qw234')
 
 print_all_accounts()
 
-#print "******USERS CONTRIBUTING******"
+print ("\n\n******USERS CONTRIBUTING******")
 add_story_user('dont', '1')
 add_story_user('donut', '0')
 add_story_user('donut', '5')
 add_story_user('donut', '8912')
 add_story_user('donut', '92')
 
+print ('\n\n******ADD STORY*******')
 add_story('da donut story', 'there was once a donut')
 add_story('da', 'asdf')
 add_story('the cow family', 'the cow said moo')
