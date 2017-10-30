@@ -169,16 +169,9 @@ def compose():
     title =  form_dict['title']
     story = form_dict['story']
     user = session['username']
-
-    #create a new ID number for this story
-    if bool(stories) == False: #if the stories dict is empty
-        new_ID = 0
-    else: #if stories dict has stories in it already
-        new_ID = len(stories)
-
     #function for adding user info into accounts db and story to story db
-    db_functions.add_story_user(user, new_ID)
-    db_functions.add_story(title, story, new_ID)
+    new_ID = db_functions.add_story(title, story)
+    db_functions.add_story_user(user, str(new_ID))
     return render_template("onestory.html", title = title, story = story, msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 
