@@ -36,18 +36,22 @@ def add_story_user(user, story):
     else:
         #eval() turns the string into list
         list_stories = eval(stories_data[0][0])
-        #insert stories in order
-        i = 0;
-        for ele_story in list_stories:
-            if ele_story > story:
-               list_stories.insert(i, story)
-               break
-            i+=1
-        if i == len(list_stories):
-            list_stories.append(story)
-        #updates the database
-        account_c.execute("UPDATE accounts SET contributed_stories = \"%s\" WHERE user = '%s'" %(repr(list_stories), user))
-        print("Success: %s has contributed to %s" %(user, story))
+        try:
+            list_stories.index(story)
+            print("%s has already contributed to this story!" %(user))
+        except:
+            #insert stories in order
+            i = 0;
+            for ele_story in list_stories:
+                if ele_story > story:
+                   list_stories.insert(i, story)
+                   break
+                i+=1
+            if i == len(list_stories):
+                list_stories.append(story)
+            #updates the database
+            account_c.execute("UPDATE accounts SET contributed_stories = \"%s\" WHERE user = '%s'" %(repr(list_stories), user))
+            print("Success: %s has contributed to %s" %(user, story))
 
 #print_all_accounts() prints out all the accounts in the database
 def print_all_accounts():
