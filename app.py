@@ -91,10 +91,10 @@ def viewall():
 
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
-    if chosen_ID not in accounts.(session['uname'])[1]: #CHECK FOR ACCURACY
-        return render_template("edit.html", title = stories.(chosen_ID)[0], last_update = stories.(chosen_ID)[2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
+    if chosen_ID not in accounts[ session['uname'] ][1]: #CHECK FOR ACCURACY
+        return render_template("edit.html", title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
-        return render_template("onestory.html", title = stories.(chosen_ID)[0], story = stories.(chosen_ID)[1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
+        return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
 
     #FOR COMPOSING
     if chosen_ID == -1:
@@ -112,12 +112,11 @@ def compose():
         new_ID = 0
     else: #if stories dict has stories in it already
         new_ID = len(stories)
-        
-    #function for adding user info into accounts db
-    add_account_user(user, new_ID)
-    #function for adding story to story db
-    add_story(new_ID, title, story)
-    return render_template("onestory.html", title = "title created by title function that uses the id to find it in the stories db", body = "body created by body function that uses the id to find it in the stories db", msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
+
+    #function for adding user info into accounts db and story to story db
+    add_story_user(user, new_ID)
+    add_story(title, story, new_ID)
+    return render_template("onestory.html", title = title, story = story, msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 
 @app.route("/edit")
@@ -126,11 +125,12 @@ def edit():
     chosen_ID = form_dict['chosen_ID']
     update = form_dict['update']
     user = session['uname']
+
     #function to update account db to include newly edited story
     add_account_user(user, chosen_ID)
     #function to add story update to story
     update_story(chosen_ID, update)
-    return render_template("onestory.html", title = "title created by title function that uses the id to find it in the stories db", body = "body created by body function that uses the id to find it in the stories db", msg = "Successfully edited story. Here\'s the story so far. While you can't contibute to it again in the future, you can always check back here to see if anyone else has continued the story!"
+    return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "Successfully edited story. Here\'s the story so far. While you can't contibute to it again in the future, you can always check back here to see if anyone else has continued the story!")
 
 
 @app.route("/logout")
