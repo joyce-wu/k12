@@ -4,7 +4,12 @@
 </head>
 
 <body>
-   <form>
+  <form>
+     {% set msgs=get_flashed_messages()%}
+     {% for msg in msgs %}
+     {{msg}}
+     {% endfor%}
+     
      Title: {{title}}
      <br>
      Most recent version:

@@ -4,6 +4,12 @@
 </head>
 
 <body>
+
+  {% set msgs=get_flashed_messages()%}
+  {% for msg in msgs %}
+  {{msg}}
+  {% endfor%}
+  
 <h1>Title: {{title}}</h1>
 <p>
 {{story}}
