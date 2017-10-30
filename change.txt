@@ -1,0 +1,1 @@
+We changed removed the link from "View specific story" to "Edit story" because the user is not allowed to view the whole story before contributing to it. Instead, there will be a permission check every time the user clicks on the link.

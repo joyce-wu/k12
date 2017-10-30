@@ -7,17 +7,12 @@ pd 7
 ---------------------
 Da Art of Storytellin'
 
-zone of reflection--
-Flesh out each category whenever necessary, appropriate.
- Need not be fully filled in until end of project,
- but best done as you go along.
-
-
 /////////// Zone of Reflection \\\\\\\\\\\
 ------------------------------------------
 OBSTACLES OVERCOME
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wow we so BOSS bc...
+We had some trouble organizing the files in our project and properly delegating jobs but we boss because we communicated with each other and used Keys To Success!
 
 UNRESOLVED ISSUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,12 +25,14 @@ wow! oo!...
 
 MID-DEVELOPMENT DESIGN CHANGES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-we changed ___ to ___ bc...
-2017-10-24 :: We changed the removed link from "View specific story" to "Edit story" because user cannot view whole story before editing it.
+2017-10-24 :: We removed link from "View specific story" to "Edit story" because the user cannot view whole story before editing it.
 
 LESSONS LEARNED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 tales of wisdom gained...
+- always update the design doc whenever there are changes
+- communication is key when delegating shared tasks
+- use class time to talk with each other and figure out any problems
 ||||||||||||||||||||||||||||||||||||||||||
 
 
@@ -114,4 +111,7 @@ bayanB -- 2017-10-28 11:06:04
 
 jenniferZ -- 2017-10-29 19:24:59
 added print_story based on user permissions and database to dictionary
+
+joyceW -- 2017-10-29 22:10:36
+added changes file
 
