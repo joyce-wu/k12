@@ -133,3 +133,6 @@ added flash messagesand inked login register pages
 joyceW -- 2017-10-30 12:14:14
 fixed some bugs?
 
+bayanB_jenniferZ_joyceW -- 2017-10-30 13:19:22
+debugging, fixed registration, and worked on displaying titles
+
