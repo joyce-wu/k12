@@ -21,7 +21,7 @@ stories = db_functions.stories_dict()
 #--------------------------------------------------
 
 #landing page
-@app.route("/")
+@app.route("/",methods=['POST','GET'])
 def root():
     #create list of story ids, titles
     title_id_list = []
@@ -34,7 +34,7 @@ def root():
     else: #if they're not logged in, bring them to the general welcome page and ask them to login/signup
         return render_template('welcome.html', uname = '', password = '', password1 = '', password2 = '') #OR WHATEVER THE WELCOME PAGE HTML IS
 
-@app.route("/login")
+@app.route("/login",methods=['POST','GET'])
 def login():
     if 'username' in session:
         #create list of story ids, titles
@@ -48,7 +48,7 @@ def login():
         return render_template("login.html")
 
 
-@app.route("/check_login")
+@app.route("/check_login",methods=['POST','GET'])
 def check_login():
     form_dict = request.args
     uname = form_dict['username'] #get user from url string
@@ -73,7 +73,7 @@ def check_login():
         return render_template('login.html', msg = "Incorrect username.")
 
 
-@app.route("/register")
+@app.route("/register",methods=['POST','GET'])
 def register():
     if 'username' not in session:
         return render_template('register.html')
@@ -85,7 +85,7 @@ def register():
 
             return render_template("viewall.html", title_id_list = title_id_list)
 
-@app.route('/check_register')
+@app.route('/check_register',methods=['POST','GET'])
 def check_register():
     form_dict = request.args
     uname = form_dict['username']
@@ -103,19 +103,18 @@ def check_register():
 
             #create list of story ids, titles
             title_id_list = []
-            for id in stories:
+            for ID in stories:
                 print ("********STORIES*********")
-                print(str(stories[id][1]))
-                title_id_list.append([str(id), str(stories[id][1])])
+                print(str(stories[ID][1]))
+                title_id_list.append([str(ID), str(stories[ID][0])])
 
-
-            return render_template("viewall.html", title_id_list = title_id_list, msg = 'Welcome.')
+                return render_template("viewall.html", title_id_list= title_id_list, msg = 'Welcome.')
         else:
             return render_template("register.html", msg = "Passwords do not match.")
 
 
 
-@app.route("/viewall")
+@app.route("/viewall",methods=['POST','GET'])
 def viewall():
     form_dict = request.args
     chosen_ID = int(form_dict['chosen_ID']) #THIS IS AN ID
@@ -138,7 +137,7 @@ def viewall():
     if chosen_ID == -1:
         return render_template("compose.html")
 
-@app.route("/compose")
+@app.route("/compose",methods=['POST','GET'])
 def compose():
     form_dict = request.args
     title =  form_dict['title']
@@ -157,7 +156,7 @@ def compose():
     return render_template("onestory.html", title = title, story = story, msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 
-@app.route("/edit")
+@app.route("/edit",methods=['POST','GET'])
 def edit():
     form_dict = request.args
     chosen_ID = form_dict['chosen_ID']
@@ -171,7 +170,7 @@ def edit():
     return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "Successfully edited story. Here\'s the story so far. While you can't contibute to it again in the future, you can always check back here to see if anyone else has continued the story!")
 
 
-@app.route("/logout")
+@app.route("/logout",methods=['POST','GET'])
 def logout():
     #remove user info from session
     if 'username' in session:
