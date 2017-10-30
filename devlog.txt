@@ -130,3 +130,6 @@ fixing bugs in app.py/templates/db_functions, db_function issue???
 bayanB -- 2017-10-30 06:32:52
 added flash messagesand inked login register pages
 
+joyceW -- 2017-10-30 12:14:14
+fixed some bugs?
+
