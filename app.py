@@ -23,6 +23,9 @@ stories = db_functions.stories_dict()
 #landing page
 @app.route("/",methods=['POST','GET'])
 def root():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     #create list of story ids, titles
     title_id_list = []
     for id in stories:
@@ -36,6 +39,9 @@ def root():
 
 @app.route("/login",methods=['POST','GET'])
 def login():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     if 'username' in session:
         #create list of story ids, titles
         title_id_list = []
@@ -50,6 +56,9 @@ def login():
 
 @app.route("/check_login",methods=['POST','GET'])
 def check_login():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     uname = form_dict['username'] #get user from url string
     password = form_dict['password'] #get pass from url string
@@ -75,6 +84,9 @@ def check_login():
 
 @app.route("/register",methods=['POST','GET'])
 def register():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     if 'username' not in session:
         return render_template('register.html')
     else:
@@ -87,6 +99,9 @@ def register():
 
 @app.route('/check_register',methods=['POST','GET'])
 def check_register():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     uname = form_dict['username']
     pass1 = form_dict['password1']
@@ -99,6 +114,7 @@ def check_register():
             print(uname + " " + pass1)
             db_functions.add_account(uname, pass1)
             db_functions.print_all_accounts()
+
             session['username'] = uname #add the username to the session
 
             #create list of story ids, titles
@@ -108,7 +124,8 @@ def check_register():
                 print(str(stories[ID][1]))
                 title_id_list.append([str(ID), str(stories[ID][0])])
 
-                return render_template("viewall.html", title_id_list= title_id_list, msg = 'Welcome.')
+            print(session['username'])
+            return render_template("viewall.html", title_id_list= title_id_list, msg = 'Welcome.')
         else:
             return render_template("register.html", msg = "Passwords do not match.")
 
@@ -116,8 +133,16 @@ def check_register():
 
 @app.route("/viewall",methods=['POST','GET'])
 def viewall():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     chosen_ID = int(form_dict['chosen_ID']) #THIS IS AN ID
+
+    #FOR COMPOSING
+    if chosen_ID == -1:
+        return render_template("compose.html")
+
 
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
@@ -133,12 +158,13 @@ def viewall():
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
 
-    #FOR COMPOSING
-    if chosen_ID == -1:
-        return render_template("compose.html")
+
 
 @app.route("/compose",methods=['POST','GET'])
 def compose():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     title =  form_dict['title']
     story = form_dict['story']
@@ -151,13 +177,16 @@ def compose():
         new_ID = len(stories)
 
     #function for adding user info into accounts db and story to story db
-    add_story_user(user, new_ID)
-    add_story(title, story, new_ID)
+    db_functions.add_story_user(user, new_ID)
+    db_functions.add_story(title, story, new_ID)
     return render_template("onestory.html", title = title, story = story, msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 
 @app.route("/edit",methods=['POST','GET'])
 def edit():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     chosen_ID = form_dict['chosen_ID']
     update = form_dict['update']
@@ -172,6 +201,9 @@ def edit():
 
 @app.route("/logout",methods=['POST','GET'])
 def logout():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     #remove user info from session
     if 'username' in session:
         session.pop('username')

@@ -5,10 +5,8 @@
 
 <body>
   <form action="/edit" method="GET">
-     {% set msgs=get_flashed_messages()%}
-     {% for msg in msgs %}
+
      {{msg}}
-     {% endfor%}
 
      Title: {{title}}
      <br>
@@ -17,7 +15,7 @@
      <br>
      Your part of the story starts here:
      <br>
-     <textarea rows="10" name="story" cols="40">
+     <textarea rows="10" name="update" cols="40" required>
        Let your creativity flow...
      </textarea>
      <br>
