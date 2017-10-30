@@ -3,10 +3,11 @@ import sqlite3
 import csv
 import threading
 
-lock = threading.RLock()
+#lock = threading.RLock()
 
 #accounts database
-account_db = sqlite3.connect("accounts_database", check_same_thread=False); #
+#, check_same_thread=False); #
+account_db = sqlite3.connect("accounts_database");
 account_c = account_db.cursor();
 
 #checks to see if accounts database was already created
@@ -15,12 +16,18 @@ try:
 except:
     print()
 
+account_db.commit();
+account_db.close();
+
 #add_account() adds an account given its username and password
 #password should be a string
 def add_account(user, password):
+    account_db = sqlite3.connect("accounts_database");
+    account_c = account_db.cursor();
+
     #looks through the table to see if the user already exists
-    with lock:
-        accounts = account_c.execute("SELECT user FROM accounts WHERE user = '%s'" %(user))
+    #with lock:
+    accounts = account_c.execute("SELECT user FROM accounts WHERE user = '%s'" %(user))
     data = account_c.fetchall()
     if(len(data) == 0):
         #contributed_stories is empty at first
@@ -29,9 +36,15 @@ def add_account(user, password):
     else:
         print("Failed: Username already exists!")
 
+    account_db.commit();
+    account_db.close();
+
 #add_story() adds the given story to the user's list of contributed stories
 #story should be a string
 def add_story_user(user, story):
+    account_db = sqlite3.connect("accounts_database");
+    account_c = account_db.cursor();
+
     #checks to see if the user exists
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
     stories_data = account_c.fetchall()
@@ -57,11 +70,20 @@ def add_story_user(user, story):
             account_c.execute("UPDATE accounts SET contributed_stories = \"%s\" WHERE user = '%s'" %(repr(list_stories), user))
             print("Success: %s has contributed to %s" %(user, story))
 
+    account_db.commit();
+    account_db.close();
+
 #print_all_accounts() prints out all the accounts in the database
 def print_all_accounts():
+    account_db = sqlite3.connect("accounts_database");
+    account_c = account_db.cursor();
+
     accounts = account_c.execute("SELECT * FROM accounts")
     for account in accounts:
         print(account)
+
+    account_db.commit();
+    account_db.close();
 print("*******PRINT ALL ACCTS********")
 print_all_accounts
 
@@ -75,27 +97,46 @@ try:
 except:
     print()
 
+stories_db.commit();
+stories_db.close();
+
 #add_story() adds the story
 #returns the id of the new story
 def add_story(title, text):
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     new_id = next_id()
     stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(new_id, 'da donut story', "\t" + text, "\t" + text))
     print("Success: Added " + title + "!")
+
+    stories_db.commit();
+    stories_db.close();
+    
     return new_id
 
 #next_id() finds the next available id
 #helper function for add_story()
 def next_id():
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     stories_c.execute("SELECT id FROM stories WHERE ID = (SELECT MAX(ID) FROM stories)")
     prev_id = stories_c.fetchall()
     if len(prev_id) == 0:
         return 0
+
+    stories_db.commit();
+    stories_db.close();
 
     return prev_id[0][0] + 1
 
 #update_story() adds new text into the story
 #story_id should be an integer
 def update_story(story_id, new_text):
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     #checks to see if story exists
     stories_c.execute("SELECT * FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
@@ -108,27 +149,54 @@ def update_story(story_id, new_text):
         stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = %d" %("\t" + new_text, story_id))
         stories_c.execute("UPDATE stories SET whole_story = '%s' WHERE id = %d" %(old_whole_story + "\n\t"+ new_text, story_id))
 
+    stories_db.commit();
+    stories_db.close();
+
 #print_all_stories() prints all stories
 def print_all_stories():
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     stories = stories_c.execute("SELECT * FROM stories")
     for story in stories:
         print(story)
 
+    stories_db.commit();
+    stories_db.close();
+
 #print_last_update_story_content() prints the last_update of the given story
 def print_last_update_story_content(story_id):
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     stories_c.execute("SELECT last_update FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     print(story[0][0])
 
+    stories_db.commit();
+    stories_db.close();
+
 #print_whole_story_content() prints the whole_story of the given story
 def print_whole_story_content(story_id):
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     stories_c.execute("SELECT whole_story FROM stories WHERE id = " + str(story_id))
     story = stories_c.fetchall()
     print(story[0][0])
 
+    stories_db.commit();
+    stories_db.close();
+
 #print_story() returns the story based on its permissions
 #story_id should be an integer
 def print_story(user, story_id):
+    account_db = sqlite3.connect("accounts_database");
+    account_c = account_db.cursor();
+
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     #checks to see if user exists
     stories = account_c.execute("SELECT contributed_stories FROM accounts WHERE user = '%s'" %(user))
     stories_data = account_c.fetchall()
@@ -145,10 +213,22 @@ def print_story(user, story_id):
             print("%s hasn't contributed to the story before" %(user))
             data = "last_update"
         stories_c.execute("SELECT %s FROM stories WHERE id = '%d'" %(data, story_id))
-        return stories_c.fetchall()[0][0]
+
+        one_story = stories_c.fetchall()[0][0]
+
+        account_db.commit();
+        account_db.close();
+
+        stories_db.commit();
+        stories_db.close();
+
+        return one_story
 
 #accounts_dict() returns a dictionary with info from the accounts database
 def accounts_dict():
+    account_db = sqlite3.connect("accounts_database");
+    account_c = account_db.cursor();
+
     account_c.execute("SELECT * FROM accounts")
     accounts = account_c.fetchall()
     acc_dict = {}
@@ -157,15 +237,26 @@ def accounts_dict():
         pwd = account[1]
         stories = eval(account[2])
         acc_dict[account[0]] = (pwd, stories)
+
+    account_db.commit();
+    account_db.close();
+
     return acc_dict
 
 #stories_dict() returns a dictionary with info from the stories database
 def stories_dict():
+    stories_db = sqlite3.connect("stories_database");
+    stories_c = stories_db.cursor();
+
     stories_c.execute("SELECT * FROM stories")
     stories = stories_c.fetchall()
     stry_dict = {}
     for story in stories:
         stry_dict[story[0]] = story[1:]
+
+    stories_db.commit();
+    stories_db.close();
+
     return stry_dict
 
 

@@ -40,7 +40,8 @@ def login():
         #create list of story ids, titles
         title_id_list = []
         for id in stories:
-            title_id_list.append([str(id), str(stories[id][1])])
+            print(title_id_list)
+            #title_id_list.append([str(id), str(stories[id][1])])
 
             return render_template("viewall.html", title_id_list = title_id_list)
     else:
@@ -95,7 +96,7 @@ def check_register():
         return render_template("register.html", msg = "That username is taken.")
     else:
         if pass1 == pass2: #if the passwords match, create account
-            print uname + " " + pass1
+            print(uname + " " + pass1)
             db_functions.add_account(uname, pass1)
             db_functions.print_all_accounts()
             session['username'] = uname #add the username to the session
@@ -104,7 +105,7 @@ def check_register():
             title_id_list = []
             for id in stories:
                 print ("********STORIES*********")
-                print str(stories[id][1])
+                print(str(stories[id][1]))
                 title_id_list.append([str(id), str(stories[id][1])])
 
 
@@ -121,6 +122,12 @@ def viewall():
 
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
+    print('*****CHOSEN ID******')
+    print(chosen_ID)
+
+    print('****SESSION USER****')
+    print(session['username'])
+
     if chosen_ID not in accounts[ session['username'] ][1]: #CHECK FOR ACCURACY
         print(session['username'])
         return render_template("edit.html", title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
@@ -172,7 +179,7 @@ def logout():
     return render_template('welcome.html', msg = 'Logout was successful.')
 
 
-db_functions.finish()
+#db_functions.finish()
 
 #-------------------------------
 if __name__ == "__main__":
