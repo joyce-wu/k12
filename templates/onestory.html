@@ -9,12 +9,14 @@
   {% for msg in msgs %}
   {{msg}}
   {% endfor%}
-  
+
 <h1>Title: {{title}}</h1>
 <p>
 {{story}}
 </p>
 <br>
-<a href="/viewall"> Return to Table of Contents<a>
+<form action="/", method = 'GET'>
+  <input type='submit' value='Return to Table of Contents'></input>
+</form>
 </body>
 </html>

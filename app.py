@@ -23,16 +23,14 @@ stories = db_functions.stories_dict()
 #landing page
 @app.route("/",methods=['POST','GET'])
 def root():
-    #create list of story ids, titles
-    title_id_list = []
-    for id in stories:
-        title_id_list.append([str(id), str(stories[id][1])])
-
     #is the user is already logged in, then take them directly to the home/view all stories page
     if 'username' in session.keys():
-        return render_template('viewall.html', title_id_list = title_id_list, msg = 'Welcome back.')
+        title_id_list = []
+        for id in stories:
+            title_id_list.append([str(id), str(stories[id][0])])
+        return render_template("viewall.html", title_id_list = title_id_list)
     else: #if they're not logged in, bring them to the general welcome page and ask them to login/signup
-        return render_template('welcome.html', uname = '', password = '', password1 = '', password2 = '') #OR WHATEVER THE WELCOME PAGE HTML IS
+        return render_template('welcome.html')
 
 @app.route("/login",methods=['POST','GET'])
 def login():
@@ -40,10 +38,8 @@ def login():
         #create list of story ids, titles
         title_id_list = []
         for id in stories:
-            print(title_id_list)
-            #title_id_list.append([str(id), str(stories[id][1])])
-
-            return render_template("viewall.html", title_id_list = title_id_list)
+            title_id_list.append([str(id), str(stories[id][0])])
+        return render_template("viewall.html", title_id_list = title_id_list)
     else:
         return render_template("login.html")
 
@@ -60,13 +56,11 @@ def check_login():
         if accounts[uname][0] == password:
             #add username to the current session
             session['username'] = uname
-
             #create list of story ids, titles
             title_id_list = []
             for id in stories:
-                title_id_list.append([str(id), str(stories[id][1])])
-
-                return render_template("viewall.html", title_id_list = title_id_list) #must send username var for jinja
+                title_id_list.append([str(id), str(stories[id][0])])
+            return render_template("viewall.html", title_id_list = title_id_list) #must send username var for jinja
         else:
             return render_template("login.html", msg = "Incorrect password.")
     else:
@@ -82,7 +76,6 @@ def register():
         title_id_list = []
         for id in stories:
             title_id_list.append([str(id), str(stories[id][1])])
-
             return render_template("viewall.html", title_id_list = title_id_list)
 
 @app.route('/check_register',methods=['POST','GET'])
@@ -104,11 +97,8 @@ def check_register():
             #create list of story ids, titles
             title_id_list = []
             for ID in stories:
-                print ("********STORIES*********")
-                print(str(stories[ID][1]))
                 title_id_list.append([str(ID), str(stories[ID][0])])
-
-                return render_template("viewall.html", title_id_list= title_id_list, msg = 'Welcome.')
+            return render_template("viewall.html", title_id_list= title_id_list, msg = 'Welcome.')
         else:
             return render_template("register.html", msg = "Passwords do not match.")
 
@@ -125,11 +115,11 @@ def viewall():
     print(chosen_ID)
 
     print('****SESSION USER****')
-    print(session['username'])
+    print(session.get('username'))
 
-    if chosen_ID not in accounts[ session['username'] ][1]: #CHECK FOR ACCURACY
-        print(session['username'])
-        return render_template("edit.html", title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
+    if chosen_ID not in accounts[ session.get('username') ][1]: #CHECK FOR ACCURACY
+        print(session.get('username'))
+        return render_template("edit.html", chosen_ID = chosen_ID, title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
 
@@ -142,7 +132,7 @@ def compose():
     form_dict = request.args
     title =  form_dict['title']
     story = form_dict['story']
-    user = session['username']
+    user = session.get('username')
 
     #create a new ID number for this story
     if bool(stories) == False: #if the stories dict is empty
@@ -151,22 +141,22 @@ def compose():
         new_ID = len(stories)
 
     #function for adding user info into accounts db and story to story db
-    add_story_user(user, new_ID)
-    add_story(title, story, new_ID)
+    db_functions.add_story_user(user, new_ID)
+    db_functions.add_story(title, story, new_ID)
     return render_template("onestory.html", title = title, story = story, msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 
-@app.route("/edit",methods=['POST','GET'])
+@app.route("/edit",methods=['GET'])
 def edit():
     form_dict = request.args
-    chosen_ID = form_dict['chosen_ID']
+    chosen_ID = int(form_dict['chosen_ID'])
     update = form_dict['update']
-    user = session['username']
+    user = session.get('username')
 
     #function to update account db to include newly edited story
-    add_account_user(user, chosen_ID)
+    db_functions.add_story_user(user, chosen_ID)
     #function to add story update to story
-    update_story(chosen_ID, update)
+    db_functions.update_story(chosen_ID, update)
     return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "Successfully edited story. Here\'s the story so far. While you can't contibute to it again in the future, you can always check back here to see if anyone else has continued the story!")
 
 

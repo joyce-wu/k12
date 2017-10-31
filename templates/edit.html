@@ -5,6 +5,7 @@
 
 <body>
   <form action="/edit" method="GET">
+    <input type="hidden" name="chosen_ID" value={{chosen_ID}}>
      {% set msgs=get_flashed_messages()%}
      {% for msg in msgs %}
      {{msg}}
@@ -17,8 +18,7 @@
      <br>
      Your part of the story starts here:
      <br>
-     <textarea rows="10" name="story" cols="40">
-       Let your creativity flow...
+     <textarea rows="10" name="update" cols="40">
      </textarea>
      <br>
      <input type="submit" name="woo" value="I'm done">

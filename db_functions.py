@@ -100,19 +100,21 @@ except:
 stories_db.commit();
 stories_db.close();
 
+def get_id(title):
+    stories = stories_dict()
+    for story_id in stories:
+        if(stories[story_id][0] == title):
+            return story_id
+
 #add_story() adds the story
 #returns the id of the new story
 def add_story(title, text):
     stories_db = sqlite3.connect("stories_database");
     stories_c = stories_db.cursor();
-
     new_id = next_id()
-    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(new_id, 'da donut story', "\t" + text, "\t" + text))
-    print("Success: Added " + title + "!")
-
+    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '%s', '%s')" %(new_id, title, "\t" + text, "\t" + text))
     stories_db.commit();
     stories_db.close();
-    
     return new_id
 
 #next_id() finds the next available id
@@ -160,7 +162,6 @@ def print_all_stories():
     stories = stories_c.execute("SELECT * FROM stories")
     for story in stories:
         print(story)
-
     stories_db.commit();
     stories_db.close();
 
@@ -264,14 +265,14 @@ def stories_dict():
 
 print('*******ADDING ACCOUNTS*******')
 add_account('donut', '1234')
-add_account('asdjlkf', '123429')
-add_account('donqwut', '1qw234')
-add_account('donqwut', '1qw234')
+add_account('brown', 'stuycs')
+add_account('dw', 'arthur')
+add_account('harold', 'fred')
 
 print_all_accounts()
 
 print ("\n\n******USERS CONTRIBUTING******")
-add_story_user('dont', '1')
+add_story_user('brown', '1')
 add_story_user('donut', '0')
 add_story_user('donut', '5')
 add_story_user('donut', '8912')
