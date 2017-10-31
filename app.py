@@ -132,14 +132,15 @@ def viewall():
 
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
-    print('*****CHOSEN ID******')
-    print(chosen_ID)
+    #print('*****CHOSEN ID******')
+    #print(chosen_ID)
 
-    print('****SESSION USER****')
-    print(session.get('username'))
+    #print('****SESSION USER****')
+    #print(session.get('username'))
 
     if chosen_ID not in accounts[ session.get('username') ][1]: #CHECK FOR ACCURACY
         print(session.get('username'))
+        print(stories[chosen_ID][2])
         return render_template("edit.html", chosen_ID = chosen_ID, title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
@@ -164,7 +165,7 @@ def compose():
 
     #function for adding user info into accounts db and story to story db
     db_functions.add_story_user(user, new_ID)
-    db_functions.add_story(title, story, new_ID)
+    db_functions.add_story(title, story)
     return render_template("onestory.html", title = title, story = story, msg = "Successfully composed new story. Here\'s your story so far. Users wil be able to add to you story in the future. Although you can\'t edit it again, you can check up on it later to see if anyone else has continued it!")
 
 

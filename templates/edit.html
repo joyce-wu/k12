@@ -5,11 +5,11 @@
 
 <body>
   <form action="/edit" method="GET">
-    <input type="hidden" name="chosen_ID" value={{chosen_ID}}>
+    <input type="hidden" name="chosen_ID" value={{chosen_ID}}></input>
      {% set msgs=get_flashed_messages()%}
      {% for msg in msgs %}
      {{msg}}
-
+     {% endfor %}
      Title: {{title}}
      <br>
      Most recent version:
