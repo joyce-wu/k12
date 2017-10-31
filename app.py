@@ -34,6 +34,9 @@ def root():
 
 @app.route("/login",methods=['POST','GET'])
 def login():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     if 'username' in session:
         #create list of story ids, titles
         title_id_list = []
@@ -46,6 +49,9 @@ def login():
 
 @app.route("/check_login",methods=['POST','GET'])
 def check_login():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     uname = form_dict['username'] #get user from url string
     password = form_dict['password'] #get pass from url string
@@ -69,6 +75,9 @@ def check_login():
 
 @app.route("/register",methods=['POST','GET'])
 def register():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     if 'username' not in session:
         return render_template('register.html')
     else:
@@ -80,6 +89,9 @@ def register():
 
 @app.route('/check_register',methods=['POST','GET'])
 def check_register():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     uname = form_dict['username']
     pass1 = form_dict['password1']
@@ -92,6 +104,7 @@ def check_register():
             print(uname + " " + pass1)
             db_functions.add_account(uname, pass1)
             db_functions.print_all_accounts()
+
             session['username'] = uname #add the username to the session
 
             #create list of story ids, titles
@@ -106,8 +119,16 @@ def check_register():
 
 @app.route("/viewall",methods=['POST','GET'])
 def viewall():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     chosen_ID = int(form_dict['chosen_ID']) #THIS IS AN ID
+
+    #FOR COMPOSING
+    if chosen_ID == -1:
+        return render_template("compose.html")
+
 
     #FOR EDITING
     #if their chosen story is one that they've ALREADY edited, then they can read it
@@ -123,12 +144,13 @@ def viewall():
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
 
-    #FOR COMPOSING
-    if chosen_ID == -1:
-        return render_template("compose.html")
+
 
 @app.route("/compose",methods=['POST','GET'])
 def compose():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     title =  form_dict['title']
     story = form_dict['story']
@@ -148,6 +170,9 @@ def compose():
 
 @app.route("/edit",methods=['GET'])
 def edit():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     form_dict = request.args
     chosen_ID = int(form_dict['chosen_ID'])
     update = form_dict['update']
@@ -162,6 +187,9 @@ def edit():
 
 @app.route("/logout",methods=['POST','GET'])
 def logout():
+    accounts = db_functions.accounts_dict()
+    stories = db_functions.stories_dict()
+
     #remove user info from session
     if 'username' in session:
         session.pop('username')
