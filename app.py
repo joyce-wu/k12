@@ -17,7 +17,6 @@ accounts = db_functions.accounts_dict()
 #int:[str, str, str]
 #story_id:[title, content, update]
 #stories = {0:['how to cs at stuy', 'YOU GOTTA USE YOUR KTS', 'KTS'], 1:['rubber ducky', 'you\'r so fine']}
-stories = db_functions.stories_dict()
 #--------------------------------------------------
 
 #landing page
@@ -26,6 +25,7 @@ def root():
     #is the user is already logged in, then take them directly to the home/view all stories page
     if 'username' in session.keys():
         title_id_list = []
+        stories = db_functions.stories_dict()
         for id in stories:
             title_id_list.append([str(id), str(stories[id][0])])
         return render_template("viewall.html", title_id_list = title_id_list)
