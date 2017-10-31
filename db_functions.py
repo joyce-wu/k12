@@ -100,12 +100,6 @@ except:
 stories_db.commit();
 stories_db.close();
 
-def get_id(title):
-    stories = stories_dict()
-    for story_id in stories:
-        if(stories[story_id][0] == title):
-            return story_id
-
 #add_story() adds the story
 #returns the id of the new story
 def add_story(title, text):
@@ -147,10 +141,10 @@ def update_story(story_id, new_text):
     else:
         #updates last_update and whole_story
         old_whole_story = story[0][2]
+        stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = '%d'" %("\t" + str(new_text), story_id))
+        stories_c.execute("UPDATE stories SET whole_story = '%s' WHERE id = '%d'" %(old_whole_story + "\n\t"+ str(new_text), story_id))
 
-        stories_c.execute("UPDATE stories SET last_update = '%s' WHERE id = %d" %("\t" + new_text, story_id))
-        stories_c.execute("UPDATE stories SET whole_story = '%s' WHERE id = %d" %(old_whole_story + "\n\t"+ new_text, story_id))
-
+        #print(stories_dict())
     stories_db.commit();
     stories_db.close();
 
@@ -262,7 +256,7 @@ def stories_dict():
 
 
 #testing
-
+'''
 print('*******ADDING ACCOUNTS*******')
 add_account('donut', '1234')
 add_account('brown', 'stuycs')
@@ -280,9 +274,14 @@ add_story_user('donut', '92')
 
 print ('\n\n******ADD STORY*******')
 add_story('da donut story', 'there was once a donut')
+print(stories_dict())
 add_story('da', 'asdf')
+print(stories_dict())
 add_story('the cow family', 'the cow said moo')
+print(stories_dict())
 add_story('cats... meow', 'cats are cute')
+print(stories_dict())
+
 
 update_story(2, "and then he ate a donut")
 #print_all_stories()
@@ -299,7 +298,7 @@ print(accounts_dict())
 
 print('\n\n****PRINT STORY DICT****')
 print(stories_dict())
-
+'''
 
 
 #finish() commits changes and closes the databases
