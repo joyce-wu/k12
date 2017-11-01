@@ -103,12 +103,10 @@ stories_db.close();
 #add_story() adds the story
 #returns the id of the new story
 def add_story(title, text):
-    tit = title.replace("'", '\'')
-    txt = text.replace("'", '\'')
     stories_db = sqlite3.connect("stories_database");
     stories_c = stories_db.cursor();
     new_id = next_id()
-    stories_c.execute("INSERT INTO stories VALUES ('%d', '%s', '"\t%s"', '"\t%s"')" %(new_id, tit, txt, txt))
+    stories_c.execute("INSERT INTO stories VALUES ('%d', ' %s', '\t%s', '\t%s')" %(new_id, title, text, text))
     stories_db.commit();
     stories_db.close();
     return new_id

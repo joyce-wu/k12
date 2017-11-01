@@ -23,6 +23,7 @@ accounts = db_functions.accounts_dict()
 @app.route("/",methods=['POST','GET'])
 def root():
     #is the user is already logged in, then take them directly to the home/view all stories page
+    print(db_functions.stories_dict())
     if 'username' in session.keys():
         title_id_list = []
         stories = db_functions.stories_dict()
@@ -183,6 +184,7 @@ def edit():
     db_functions.add_story_user(user, chosen_ID)
     #function to add story update to story
     db_functions.update_story(chosen_ID, update)
+    stories = db_functions.stories_dict()
     return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "Successfully edited story. Here\'s the story so far. While you can't contibute to it again in the future, you can always check back here to see if anyone else has continued the story!")
 
 
