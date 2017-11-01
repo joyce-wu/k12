@@ -18,6 +18,7 @@ UNRESOLVED ISSUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 blah blah pesky bug...
 maybe some of these will move into the Obs.Ovrcm section...
+Titles and text cannot contain single quotes because the entire string gets cut off when being added to the database. 
 
 COOL STUFF LEARNED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,3 +137,11 @@ fixed some bugs?
 bayanB_jenniferZ_joyceW -- 2017-10-30 13:19:22
 debugging, fixed registration, and worked on displaying titles
 
+joyceW -- 2017-10-31 10:27:13
+more debugging
+
+joyceW -- 2017-10-31 13:20:09
+more bug fixes
+
+joyceW -- 2017-11-01 10:29:02
+final fixes
