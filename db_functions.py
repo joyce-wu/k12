@@ -84,8 +84,8 @@ def print_all_accounts():
 
     account_db.commit();
     account_db.close();
-print("*******PRINT ALL ACCTS********")
-print_all_accounts
+#print("*******PRINT ALL ACCTS********")
+#print_all_accounts
 
 
 #stories database

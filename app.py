@@ -23,7 +23,6 @@ accounts = db_functions.accounts_dict()
 @app.route("/",methods=['POST','GET'])
 def root():
     #is the user is already logged in, then take them directly to the home/view all stories page
-    print(db_functions.stories_dict())
     if 'username' in session.keys():
         title_id_list = []
         stories = db_functions.stories_dict()
@@ -102,10 +101,7 @@ def check_register():
         return render_template("register.html", msg = "That username is taken.")
     else:
         if pass1 == pass2: #if the passwords match, create account
-            print(uname + " " + pass1)
             db_functions.add_account(uname, pass1)
-            db_functions.print_all_accounts()
-
             session['username'] = uname #add the username to the session
 
             #create list of story ids, titles
@@ -140,8 +136,6 @@ def viewall():
     #print(session.get('username'))
 
     if chosen_ID not in accounts[ session.get('username') ][1]: #CHECK FOR ACCURACY
-        print(session.get('username'))
-        print(stories[chosen_ID][2])
         return render_template("edit.html", chosen_ID = chosen_ID, title = stories[chosen_ID][0], last_update = stories[chosen_ID][2], msg = "Since you have not yet edited this story, you must do so before viewing the entire story.") #they can edit
     else: #if they have already edited the story
         return render_template("onestory.html", title = stories[chosen_ID][0], story = stories[chosen_ID][1], msg = "You\'ve contributed to this story before. While you can't contribute to it again, you can read the whole story so far.")
